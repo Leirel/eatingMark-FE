@@ -1,35 +1,16 @@
-import { useEffect, useState } from "react";
-import { getAllPlaces } from "../api/places";
-import PlaceCard from "./PlaceCard";
-import Loader from "./Loader";
+import React from "react";
 
-export default function PlaceList() {
-    const [places, setPlaces] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        async function fetchPlaces() {
-            const data = await getAllPlaces();
-            setPlaces(data);
-            setLoading(false);
-        }
-        fetchPlaces();
-    }, []);
-
-    if (loading) return <Loader />;
-    if (places.length === 0) return <p>맛집 데이터가 없습니다.</p>;
-
+export default function PlaceList({ places, baseUrl }) {
     return (
-        <div
-            style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-                gap: "20px",
-                padding: "20px",
-            }}
-        >
+        <div className="place-list">
             {places.map((place) => (
-                <PlaceCard key={place.id} place={place} />
+                <div key={place.id} className="place-card">
+                    <img src={baseUrl + place.image} alt={place.name} className="place-img" />
+                    <div className="card-content">
+                        <h3 className="place-name">{place.name}</h3>
+                        <p className="place-address">{place.address}</p>
+                    </div>
+                </div>
             ))}
         </div>
     );
